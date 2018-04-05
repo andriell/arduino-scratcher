@@ -11,7 +11,7 @@ struct ServoStruct {
 #define S2_PIN 5
 #define S3_PIN 4
 
-ServoStruct servos[4] = {{90, 90, 1000000, 0}, {90, 90, 1000000, 0},{90, 90, 1000000, 0},{90, 90, 1000000, 0}};
+ServoStruct servos[4] = {{90, 90, 1000000, 0}, {90, 90, 1000000, 0}, {90, 90, 1000000, 0}, {90, 90, 1000000, 0}};
 
 void servoSetup() {
   servos[0].servo.attach(S0_PIN);
