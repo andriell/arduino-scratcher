@@ -9,15 +9,15 @@ void setup() {
   Wire.begin();
   laserSetup();
   servoSetup();
-  //touchTestStart();
-  laserTestStart();
+  touchTestStart();
+  //laserTestStart();
 }
 
 void loop() {
-  delay(50);
+  //delay(50);
   touchLoop();
-  laserLoop();
+  //laserLoop();
   servoLoop();
-  Serial.println();
+  Serial.println(micros());
 }
 

@@ -10,7 +10,7 @@ void laserSetup() {
   laserSensor.setTimeout(500);
   // Высокая точность
   // increase timing budget to 200 ms
-  laserSensor.setMeasurementTimingBudget(200000);
+  laserSensor.setMeasurementTimingBudget(20000);
 }
 
 void laserLoop() {
