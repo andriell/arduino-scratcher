@@ -16,10 +16,10 @@ struct ServoStruct {
 
 
 ServoStruct servos[4] = {
-  {90, 90, 90, 0, 180, 200, 0},
-  { 0,  0,  0, 0, 180, 200, 0},
-  { 0,  0,  0, 0, 180, 200, 0},
-  { 0,  0,  0, 0, 180, 200, 0}
+  {90, 90, 90, 0, 180, 20000, 0},
+  { 0,  0,  0, 0, 180, 20000, 0},
+  { 0,  0,  0, 0, 180, 20000, 0},
+  { 0,  0,  0, 0, 180, 20000, 0}
 };
 
 boolean servoOn = true;
@@ -75,7 +75,7 @@ void servoLoop() {
 
 boolean servoSet(int i, int a) {
   if (servoOn == false) {
-    return false;
+    //return false;
   }
   if (a < servos[i].vMin) {
     servos[i].need = servos[i].vMin;

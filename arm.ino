@@ -27,7 +27,7 @@ boolean armSetXYZ(long x, long y, long z) {
   r = r && servoSet(0, a0);
   r = r && servoSet(1, 180 - a1 - a3);
   r = r && servoSet(2, 180 - a1 - a2);
-  r = r && servoSet(3, 180 - a2 + a3 + armA);
+  r = r && servoSet(3, a3 - a2 + armA);
   Serial.print(" arm x=");
   Serial.print(x);
   Serial.print(" y=");

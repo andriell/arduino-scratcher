@@ -21,16 +21,16 @@ void touchLoop() {
   Serial.print(touchYVal);
   if (touchTest) {
     if (touchXVal < -50) {
-      touchTestXYZ[2]++;
-    }
-    if (touchXVal > 50) {
       touchTestXYZ[2]--;
     }
+    if (touchXVal > 50) {
+      touchTestXYZ[2]++;
+    }
     if (touchYVal < -50) {
-      touchTestXYZ[0]++;
+      touchTestXYZ[0]--;
     }
     if (touchYVal > 50) {
-      touchTestXYZ[0]--;
+      touchTestXYZ[0]++;
     }
     armSetXYZ(touchTestXYZ[0], touchTestXYZ[1], touchTestXYZ[2]);
   }
@@ -39,8 +39,9 @@ void touchLoop() {
 void touchTestStart() {
   touchTest = true;
   touchTestXYZ[0] = 0;
-  touchTestXYZ[1] = 500;
+  touchTestXYZ[1] = 50;
   touchTestXYZ[2] = 500;
+  armSetA(90);
 }
 
 int touchX() {

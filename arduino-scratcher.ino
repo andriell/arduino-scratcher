@@ -9,11 +9,12 @@ void setup() {
   Wire.begin();
   laserSetup();
   servoSetup();
+  //touchTestStart();
+  laserTestStart();
 }
 
 void loop() {
   delay(50);
-  armSetXYZ(500, 500, 500);
   touchLoop();
   laserLoop();
   servoLoop();

@@ -31,8 +31,9 @@ void laserLoop() {
 void laserTestStart() {
   laserTest = true;
   laserTestXYZ[0] = 0;
-  laserTestXYZ[1] = 500;
+  laserTestXYZ[1] = 50;
   laserTestXYZ[2] = 500;
+  armSetA(0);
 }
 
 unsigned int laserVal() {
