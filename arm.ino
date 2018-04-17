@@ -23,10 +23,10 @@ boolean armSetXYZ(long x, long y, long z) {
   int a1 = round(atan2(h, l1) * 180 / ARM_PI);
   int a2 = round(atan2(h, l2) * 180 / ARM_PI);
   int a3 = round(atan2(z, sqrt(x * x + y * y)) * 180 / ARM_PI);
-  r = r && sSet(0, a0);
-  r = r && sSet(1, a1);
-  r = r && sSet(2, a2);
-  r = r && sSet(2, a3 + armA);
+  r = r && servoSet(0, a0);
+  r = r && servoSet(1, a1);
+  r = r && servoSet(2, a2);
+  r = r && servoSet(2, a3 + armA);
   return r;
 }
 

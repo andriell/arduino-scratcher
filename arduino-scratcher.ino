@@ -17,9 +17,9 @@ void loop() {
   servoLoop();
   unsigned long time = micros();
   if (time > timeUpdate) {
-    sSet(0, andle);
-    sSet(1, andle);
-    sSet(2, andle);
+    servoSet(0, andle);
+    servoSet(1, andle);
+    servoSet(2, andle);
     if (andle == 0) {
       andle = 180;
     } else {
