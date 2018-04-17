@@ -16,10 +16,10 @@ struct ServoStruct {
 
 
 ServoStruct servos[4] = {
-  {90, 90, 90, 0, 180, 20000, 0},
-  { 0,  0,  0, 0, 180, 20000, 0},
-  { 0,  0,  0, 0, 180, 20000, 0},
-  { 0,  0,  0, 0, 180, 20000, 0}
+  {90, 90, 90, 0, 180, 200, 0},
+  { 0,  0,  0, 0, 180, 200, 0},
+  { 0,  0,  0, 0, 180, 200, 0},
+  { 0,  0,  0, 0, 180, 200, 0}
 };
 
 boolean servoOn = true;
@@ -36,12 +36,14 @@ void servoSetup() {
 
 void servoLoop() {
   unsigned long time = micros();
-  for (int i = 0; i < 3; i++) {
+  Serial.print(" servo ");
+  for (int i = 0; i < 4; i++) {
     Serial.print(i);
-    Serial.print(" ");
+    Serial.print(":");
     Serial.print(servos[i].current);
-    Serial.print(" ");
-    Serial.println(servos[i].need);
+    Serial.print(">");
+    Serial.print(servos[i].need);
+    Serial.print(" | ");
     if (servos[i].need == servos[i].current) {
       continue;
     }
@@ -65,7 +67,7 @@ void servoLoop() {
     if (r) {
       servos[0].need = servos[0].normal;
     }
-    if (abs(servos[0].need - servos[0].normal) = 1) {
+    if (abs(servos[0].need - servos[0].normal) == 1) {
       beep();
     }
   }

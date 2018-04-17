@@ -15,6 +15,8 @@ void laserSetup() {
 
 void laserLoop() {
   laserValue = laserSensor.readRangeSingleMillimeters();
+  Serial.print(" laser ");
+  Serial.print(laserValue);
   if (laserTest) {
     if (laserValue > 500) {
       laserTestXYZ[1]++;
@@ -28,7 +30,7 @@ void laserLoop() {
 
 void laserTestStart() {
   laserTest = true;
-  laserTestXYZ[0] = 500;
+  laserTestXYZ[0] = 0;
   laserTestXYZ[1] = 500;
   laserTestXYZ[2] = 500;
 }

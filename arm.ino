@@ -1,6 +1,6 @@
 #define ARM_PI 3.1416
-const long ARM_A1 = 500;
-const long ARM_A2 = 450;
+const long ARM_A1 = 450;
+const long ARM_A2 = 370;
 
 long armXYZ[3] = {0, 0, 0};
 int armA = 0;
@@ -19,14 +19,39 @@ boolean armSetXYZ(long x, long y, long z) {
   long l1 = (l * l + ARM_A1 * ARM_A1 - ARM_A2 * ARM_A2) / (2 * l);
   long l2 = l - l1;
   long h = sqrt(ARM_A1 * ARM_A1 - l1 * l1);
-  int a0 = round(atan2(y, x) * 180 / ARM_PI + 90);
+  long xy = sqrt(x * x + y * y);
+  int a0 = round(atan2(y,  x) * 180 / ARM_PI);
   int a1 = round(atan2(h, l1) * 180 / ARM_PI);
   int a2 = round(atan2(h, l2) * 180 / ARM_PI);
-  int a3 = round(atan2(z, sqrt(x * x + y * y)) * 180 / ARM_PI);
+  int a3 = round(atan2(z, xy) * 180 / ARM_PI);
   r = r && servoSet(0, a0);
-  r = r && servoSet(1, a1);
+  r = r && servoSet(1, 180 - a1 - a3);
   r = r && servoSet(2, a2);
-  r = r && servoSet(2, a3 + armA);
+  r = r && servoSet(3, a3 - a1 - a2 + armA);
+  Serial.print(" arm x=");
+  Serial.print(x);
+  Serial.print(" y=");
+  Serial.print(y);
+  Serial.print(" z=");
+  Serial.print(z);
+  Serial.print(" l=");
+  Serial.print(l);
+  Serial.print(" l1=");
+  Serial.print(l1);
+  Serial.print(" l2=");
+  Serial.print(l2);
+  Serial.print(" h=");
+  Serial.print(h);
+  Serial.print(" a0=");
+  Serial.print(a0);
+  Serial.print(" a1=");
+  Serial.print(a1);
+  Serial.print(" a2=");
+  Serial.print(a2);
+  Serial.print(" a3=");
+  Serial.print(a3);
+  Serial.print(" r=");
+  Serial.print (r);
   return r;
 }
 

@@ -1,5 +1,5 @@
-const int TOUCH_X_PIN = A1;
-const int TOUCH_Y_PIN = A0;
+const int TOUCH_X_PIN = A0;
+const int TOUCH_Y_PIN = A1;
 
 int touchXVal = 0;
 int touchYVal = 0;
@@ -15,26 +15,30 @@ void touchSetup() {
 void touchLoop() {
   touchXVal = analogRead(TOUCH_X_PIN) - 512;
   touchYVal = analogRead(TOUCH_Y_PIN) - 512;
-  if (touchTest) {
-    if (touchXVal < 50) {
-      touchTestXYZ[2]--;
-    }
-    if (touchXVal > 50) {
+  Serial.print(" toch x=");
+  Serial.print(touchXVal);
+  Serial.print(" y=");
+  Serial.print(touchYVal);
+  //if (touchTest) {
+    if (touchXVal < -50) {
       touchTestXYZ[2]++;
     }
-    if (touchYVal < 50) {
-      touchTestXYZ[0]--;
+    if (touchXVal > 50) {
+      touchTestXYZ[2]--;
     }
-    if (touchYVal > 50) {
+    if (touchYVal < -50) {
       touchTestXYZ[0]++;
     }
+    if (touchYVal > 50) {
+      touchTestXYZ[0]--;
+    }
     armSetXYZ(touchTestXYZ[0], touchTestXYZ[1], touchTestXYZ[2]);
-  }
+  //}
 }
 
 void touchTestStart() {
   touchTest = true;
-  touchTestXYZ[0] = 500;
+  touchTestXYZ[0] = 0;
   touchTestXYZ[1] = 500;
   touchTestXYZ[2] = 500;
 }
