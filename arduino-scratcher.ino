@@ -5,22 +5,15 @@
 boolean inited = false;
 
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(38400);
   Wire.begin();
   laserSetup();
   servoSetup();
 }
 
-void initialization() {
-  touchTestStart();
-}
-
 void loop() {
   delay(50);
-  if (!inited) {
-    initialization();
-    inited = true;
-  }
+  armSetXYZ(500, 500, 500);
   touchLoop();
   laserLoop();
   servoLoop();

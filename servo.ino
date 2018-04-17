@@ -74,7 +74,7 @@ void servoLoop() {
 }
 
 boolean servoSet(int i, int a) {
-  if (!servoOn) {
+  if (servoOn == false) {
     return false;
   }
   if (a < servos[i].vMin) {
