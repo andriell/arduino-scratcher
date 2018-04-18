@@ -11,67 +11,95 @@ decode_results controlResults;
 // 14 - Ok
 // 15 - *
 // 16 - #
-unsigned long control = 0;
+byte control = 0;
 
 void controlSetup() {
   controlIR.enableIRIn();
 }
 
 void controlLoop() {
+  control = 0;
+  Serial.print(" controll ");
   if (controlIR.decode(&controlResults)) {
+    bitSet(control, 20);
+    Serial.print(controlResults.value);
     switch (controlResults.value) {
-      case 0xFFA25D:
-        bitSet(control, 1);
+      case 16753245:
+        control = 1;
         break;
-      case 0xFF629D:
-        bitSet(control, 2);
+      case 16736925:
+        control = 2;
         break;
-      case 0xFFE21D:
-        bitSet(control, 3);
+      case 16769565:
+        control = 3;
         break;
-      case 0xFF22DD:
-        bitSet(control, 4);
+      case 16720605:
+        control = 4;
         break;
-      case 0xFF02FD:
-        bitSet(control, 5);
+      case 16712445:
+        control = 5;
         break;
-      case 0xFFC23D:
-        bitSet(control, 6);
+      case 16761405:
+        control = 6;
         break;
-      case 0xFFE01F:
-        bitSet(control, 7);
+      case 16769055:
+        control = 7;
         break;
-      case 0xFFA857:
-        bitSet(control, 8);
+      case 16754775:
+        control = 8;
         break;
-      case 0xFF906F:
-        bitSet(control, 9);
+      case 16748655:
+        control = 9;
         break;
-      case 0xFF6897:
-        bitSet(control, 15);
+      case 16738455:
+        control = 15;
         break;
-      case 0xFF9867:
-        bitSet(control, 0);
+      case 16750695:
+        control = 0;
         break;
-      case 0xFFB04F:
-        bitSet(control, 16);
+      case 16756815:
+        control = 16;
         break;
-      case 0xFF18E7:
-        bitSet(control, 10);
+      case 16718055:
+        control = 10;
         break;
-      case 0xFF10EF:
-        bitSet(control, 13);
+      case 16716015:
+        control = 13;
         break;
-      case 0xFF38C7:
-        bitSet(control, 14);
+      case 16726215:
+        control = 14;
         break;
-      case 0xFF5AA5:
-        bitSet(control, 11);
+      case 16734885:
+        control = 11;
         break;
-      case 0xFF4AB5:
-        bitSet(control, 12);
+      case 16730805:
+        control = 12;
         break;
     };
+    controlIR.resume();
   }
+  Serial.print("-");
+  Serial.print(control);
+  if (control == 1) {
+    touchTestStop();
+    laserTestStop();
+    prog1Start();
+  } else if (control == 8) {
+    prog1Stop();
+    touchTestStop();
+    laserTestStart();
+  } else if (control == 9) {
+    prog1Stop();
+    laserTestStop();
+    touchTestStart();
+  } else if (control == 15) {
+    servoOff();
+  } else if (control == 16) {
+    servoOn();
+  }
+}
+
+boolean controlRead(int i) {
+  return bitRead(control, i);
 }
 

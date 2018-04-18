@@ -26,10 +26,9 @@ ServoStruct servos[4] = {
  * 1 - включено
  * 2 - начало выключения
  * 3 - выключение
- * 4 - выключение
- * 5 - выключено
+ * 4 - выключено
  */
-byte servoStage = 1;
+byte servoStage = 4;
 bool servoIsDone = true;
 
 void servoSetup() {
@@ -43,7 +42,7 @@ void servoSetup() {
 }
 
 void servoLoop() {
-  if (servoStage == 1 || servoStage == 2 || servoStage == 3 || servoStage == 4) {
+  if (servoStage == 1 || servoStage == 2 || servoStage == 3) {
     servoIsDone = true;
     unsigned long time = micros();
     Serial.print(" servo ");
@@ -75,18 +74,15 @@ void servoLoop() {
     }
   }
   if (servoStage == 2) {
-    servos[1].need = 90;
-    servos[1].available = true;
-    servoIsDone = false;
-    servoStage = 3;
-  } else if (servoStage == 3 && servoIsDone) {
-    for (int i = 0; i < 4; i++) {
-      servos[i].available = true;
-      servos[i].need == servos[i].normal;
+    if (servos[1].current == 90) {
+      for (int i = 0; i < 4; i++) {
+        servos[i].available = true;
+        servos[i].need = servos[i].normal;
+      }
+      servoStage = 3;
     }
+  } else if (servoStage == 3 && servoIsDone) {
     servoStage = 4;
-  } else if (servoStage == 4 && servoIsDone) {
-    servoStage = 5;
     beep();
   }
 }
@@ -114,6 +110,9 @@ boolean servoDone() {
 }
 
 void servoOn() {
+  if (servoStage != 4) {
+    return;
+  }
   servos[0].available = true;
   servos[1].available = true;
   servos[2].available = true;
@@ -122,10 +121,14 @@ void servoOn() {
 }
 
 void servoOff() {
+  if (servoStage != 1) {
+    return;
+  }
   servos[0].available = false;
-  servos[1].available = false;
+  servos[1].available = true;
   servos[2].available = false;
   servos[3].available = false;
+  servos[1].need = 90;
   servoStage = 2;
 }
 

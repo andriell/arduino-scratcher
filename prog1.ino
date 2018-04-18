@@ -4,3 +4,10 @@ void prog1Loop() {
   
 }
 
+void prog1Stop() {
+  
+}
+
+void prog1Start() {
+  
+}

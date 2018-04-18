@@ -12,8 +12,8 @@ void laserSetup() {
 }
 
 void laserLoop() {
-  unsigned int laserValue = laserVal();
   if (laserTest) {
+    unsigned int laserValue = laserVal();
     if (laserValue > 500) {
       laserTestXYZ[1]++;
     }
@@ -30,6 +30,10 @@ void laserTestStart() {
   laserTestXYZ[1] = 50;
   laserTestXYZ[2] = 500;
   armSetA(0);
+}
+
+void laserTestStop() {
+  laserTest = false;
 }
 
 unsigned int laserVal() {

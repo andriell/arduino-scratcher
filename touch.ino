@@ -44,6 +44,10 @@ void touchTestStart() {
   armSetA(90);
 }
 
+void touchTestStop() {
+  touchTest = false;
+}
+
 int touchX() {
   return touchXVal;
 }

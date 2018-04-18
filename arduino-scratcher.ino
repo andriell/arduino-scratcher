@@ -6,11 +6,12 @@
 boolean inited = false;
 
 void setup() {
-  Serial.begin(38400);
+  Serial.begin(115200);
   Wire.begin();
   laserSetup();
   servoSetup();
-  touchTestStart();
+  controlSetup();
+  //touchTestStart();
   //laserTestStart();
 }
 
@@ -19,6 +20,9 @@ void loop() {
   touchLoop();
   //laserLoop();
   servoLoop();
+  controlLoop();
+  prog1Loop();
+  Serial.print(" m ");
   Serial.println(micros());
 }
 
