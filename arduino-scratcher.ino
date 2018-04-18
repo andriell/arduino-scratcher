@@ -1,6 +1,7 @@
 #include <Servo.h>
 #include <Wire.h>
 #include <VL53L0X.h>
+#include <IRremote.h>
 
 boolean inited = false;
 
