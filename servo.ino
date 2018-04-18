@@ -6,6 +6,7 @@ struct ServoStruct {
   int vMax;
   unsigned long speed;
   unsigned long time;
+  boolean available;
   Servo servo;
 };
 
@@ -14,15 +15,22 @@ struct ServoStruct {
 #define S2_PIN 5
 #define S3_PIN 4
 
-
 ServoStruct servos[4] = {
-  {90, 90, 90, 0, 180, 20000, 0},
-  { 0,  0,  0, 0, 180, 20000, 0},
-  { 0,  0,  0, 0, 180, 20000, 0},
-  { 0,  0,  0, 0, 180, 20000, 0}
+  {90, 90, 90, 0, 180, 20000, 0, false},
+  { 0,  0,  0, 0, 180, 20000, 0, false},
+  { 0,  0,  0, 0, 180, 20000, 0, false},
+  { 0,  0,  0, 0, 180, 20000, 0, false}
 };
 
-boolean servoOn = true;
+/**
+ * 1 - включено
+ * 2 - начало выключения
+ * 3 - выключение
+ * 4 - выключение
+ * 5 - выключено
+ */
+byte servoStage = 1;
+bool servoIsDone = true;
 
 void servoSetup() {
   servos[0].servo.attach(S0_PIN);
@@ -35,69 +43,89 @@ void servoSetup() {
 }
 
 void servoLoop() {
-  unsigned long time = micros();
-  Serial.print(" servo ");
-  for (int i = 0; i < 4; i++) {
-    Serial.print(i);
-    Serial.print(":");
-    Serial.print(servos[i].current);
-    Serial.print(">");
-    Serial.print(servos[i].need);
-    Serial.print(" | ");
-    if (servos[i].need == servos[i].current) {
-      continue;
+  if (servoStage == 1 || servoStage == 2 || servoStage == 3 || servoStage == 4) {
+    servoIsDone = true;
+    unsigned long time = micros();
+    Serial.print(" servo ");
+    for (int i = 0; i < 4; i++) {
+      Serial.print(i);
+      Serial.print(":");
+      Serial.print(servos[i].current);
+      Serial.print(">");
+      Serial.print(servos[i].need);
+      Serial.print(" | ");
+      if (servos[i].available == false) {
+        continue;
+      }
+      if (servos[i].need == servos[i].current) {
+        continue;
+      } else {
+        servoIsDone = false;
+      }
+      if (servos[i].speed + servos[i].time > time) {
+        continue;
+      }
+      servos[i].time = time;
+      if (servos[i].need > servos[i].current) {
+        servos[i].current++;
+      } else {
+        servos[i].current--;
+      }
+      servos[i].servo.write(servos[i].current);
     }
-    if (servos[i].speed + servos[i].time > time) {
-      continue;
-    }
-    servos[i].time = time;
-    if (servos[i].need > servos[i].current) {
-      servos[i].current++;
-    } else {
-      servos[i].current--;
-    }
-    servos[i].servo.write(servos[i].current);
   }
-  if (!servoOn) {
-    boolean r = true;
-    for (int i = 1; i < 4; i++) {
-      servos[i].need = servos[i].normal;
-      r = r && servos[i].need == servos[i].current;
+  if (servoStage == 2) {
+    servos[1].need = 90;
+    servos[1].available = true;
+    servoIsDone = false;
+    servoStage = 3;
+  } else if (servoStage == 3 && servoIsDone) {
+    for (int i = 0; i < 4; i++) {
+      servos[i].available = true;
+      servos[i].need == servos[i].normal;
     }
-    if (r) {
-      servos[0].need = servos[0].normal;
-    }
-    if (abs(servos[0].need - servos[0].normal) == 1) {
-      beep();
-    }
+    servoStage = 4;
+  } else if (servoStage == 4 && servoIsDone) {
+    servoStage = 5;
+    beep();
   }
 }
 
 boolean servoSet(int i, int a) {
-  if (servoOn == false) {
-    //return false;
-  }
-  if (a < servos[i].vMin) {
-    servos[i].need = servos[i].vMin;
+  if (servoStage != 1) {
     return false;
+  }
+  boolean r = true;
+  if (a < servos[i].vMin) {
+    a = servos[i].vMin;
+    r = false;
   }
   if (a > servos[i].vMax) {
-    servos[i].need = servos[i].vMax;
-    return false;
+    a = servos[i].vMax;
+    r = false;
   }
+  servoIsDone = servos[i].need == a;
   servos[i].need = a;
-  return true;
-}
-
-boolean servoDone() {
-  boolean r = true;
-  for (int i = 0; i < 4; i++) {
-    r = r && servos[i].need == servos[i].current;
-  }
   return r;
 }
 
-boolean servoOff() {
-  servoOn = false;
+boolean servoDone() {
+  return servoIsDone;
+}
+
+void servoOn() {
+  servos[0].available = true;
+  servos[1].available = true;
+  servos[2].available = true;
+  servos[3].available = true;
+  servoStage = 1;
+}
+
+void servoOff() {
+  servos[0].available = false;
+  servos[1].available = false;
+  servos[2].available = false;
+  servos[3].available = false;
+  servoStage = 2;
 }
 
