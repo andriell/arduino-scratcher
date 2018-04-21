@@ -1,13 +1,9 @@
 #define ARM_PI 3.1416
 const long ARM_A1 = 450;
 const long ARM_A2 = 370;
+const long ARM_L  = 820;
 
-long armXYZ[3] = {0, 0, 0};
 int armA = 0;
-
-void armSetA(int a) {
-  armA = a;
-}
 
 boolean armSetXYZ(long x, long y, long z) {
   boolean r = true;
@@ -24,10 +20,10 @@ boolean armSetXYZ(long x, long y, long z) {
   int a1 = round(atan2(h, l1) * 180 / ARM_PI);
   int a2 = round(atan2(h, l2) * 180 / ARM_PI);
   int a3 = round(atan2(z, xy) * 180 / ARM_PI);
-  r = r && servoSet(0, a0);
-  r = r && servoSet(1, 180 - a1 - a3);
-  r = r && servoSet(2, 180 - a1 - a2);
-  r = r && servoSet(3, a3 - a2 + armA);
+  r = servoSet(0, a0) && r;
+  r = servoSet(1, 180 - a1 - a3) && r;
+  r = servoSet(2, 180 - a1 - a2) && r;
+  r = servoSet(3, a3 - a2 + armA) && r;
   Serial.print(" arm x=");
   Serial.print(x);
   Serial.print(" y=");
@@ -54,4 +50,9 @@ boolean armSetXYZ(long x, long y, long z) {
   Serial.print (r);
   return r;
 }
+
+void armSetA(int a) {
+  armA = a;
+}
+
 

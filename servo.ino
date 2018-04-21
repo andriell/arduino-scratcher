@@ -16,10 +16,10 @@ struct ServoStruct {
 #define S3_PIN 4
 
 ServoStruct servos[4] = {
-  {90, 90, 90, 0, 180, 20000, 0, false},
+  {90, 90, 90, 0, 180, 40000, 0, false},
+  { 0,  0,  0, 0, 180, 40000, 0, false},
   { 0,  0,  0, 0, 180, 20000, 0, false},
-  { 0,  0,  0, 0, 180, 20000, 0, false},
-  { 0,  0,  0, 0, 180, 20000, 0, false}
+  { 0,  0,  0, 0, 180, 10000, 0, false}
 };
 
 /**
@@ -42,10 +42,12 @@ void servoSetup() {
 }
 
 void servoLoop() {
+  Serial.print(" servo");
+  Serial.print(servoStage);
+  Serial.print(" ");
   if (servoStage == 1 || servoStage == 2 || servoStage == 3) {
     servoIsDone = true;
     unsigned long time = micros();
-    Serial.print(" servo ");
     for (int i = 0; i < 4; i++) {
       Serial.print(i);
       Serial.print(":");
@@ -88,6 +90,8 @@ void servoLoop() {
 }
 
 boolean servoSet(int i, int a) {
+  Serial.print(" ss");
+  Serial.print(i);
   if (servoStage != 1) {
     return false;
   }
@@ -102,6 +106,10 @@ boolean servoSet(int i, int a) {
   }
   servoIsDone = servos[i].need == a;
   servos[i].need = a;
+  Serial.print("=");
+  Serial.print(a);
+  Serial.print(":");
+  Serial.print(r);
   return r;
 }
 

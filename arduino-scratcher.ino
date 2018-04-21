@@ -16,9 +16,8 @@ void setup() {
 }
 
 void loop() {
-  //delay(50);
   touchLoop();
-  //laserLoop();
+  laserLoop();
   servoLoop();
   controlLoop();
   prog1Loop();
