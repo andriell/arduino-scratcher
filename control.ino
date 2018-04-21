@@ -81,22 +81,37 @@ void controlLoop() {
   Serial.print("-");
   Serial.print(control);
   if (control == 1) {
-    touchTestStop();
-    laserTestStop();
+    controlStopAll();
     prog1Start();
+  } else if (control == 2) {
+    controlStopAll();
+    prog2Start();
+  } else if (control == 3) {
+    controlStopAll();
+    prog3Start();
+  } else if (control == 4) {
+    controlStopAll();
+    prog4Start();
   } else if (control == 8) {
-    prog1Stop();
-    touchTestStop();
+    controlStopAll();
     laserTestStart();
   } else if (control == 9) {
-    prog1Stop();
-    laserTestStop();
+    controlStopAll();
     touchTestStart();
   } else if (control == 15) {
     servoOff();
   } else if (control == 16) {
     servoOn();
   }
+}
+
+void controlStopAll() {
+  touchTestStop();
+  laserTestStop();
+  prog1Stop();
+  prog2Stop();
+  prog3Stop();
+  prog4Stop();
 }
 
 boolean controlRead(int i) {

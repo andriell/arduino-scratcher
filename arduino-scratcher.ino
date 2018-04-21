@@ -21,6 +21,9 @@ void loop() {
   servoLoop();
   controlLoop();
   prog1Loop();
+  prog2Loop();
+  prog3Loop();
+  prog4Loop();
   Serial.print(" m ");
   Serial.println(micros());
 }

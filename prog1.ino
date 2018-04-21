@@ -1,23 +1,12 @@
 #define PROG1_MAX_STEP 16
 const int PROG1_H = 450;
 
-struct prog1Struct {
-  int x;
-  int y;
-  unsigned int h;
-};
-
-prog1Struct prog1Point[PROG1_MAX_STEP] = {
-  {0,0,0},{0,0,0},{0,0,0},{0,0,0},
-  {0,0,0},{0,0,0},{0,0,0},{0,0,0},
-  {0,0,0},{0,0,0},{0,0,0},{0,0,0},
-  {0,0,0},{0,0,0},{0,0,0},{0,0,0},
-};
 boolean prog1On = false;
 byte prog1Step = 0;
-byte prog1I = 0;
 float prog1ACos = 0;
 float prog1ASin = 0;
+int prog1H = 0;
+int prog1L = 0;
 
 void prog1Loop() {
   if (prog1On == false) {
@@ -31,57 +20,38 @@ void prog1Loop() {
     int prog1A = (millis() % 140) + 20;
     prog1ACos = cos(prog1A * 0.017453);
     prog1ASin = sin(prog1A * 0.017453);
-    Serial.print(" A=");
-    Serial.print(prog1A);
-    for (int i = 0; i < PROG1_MAX_STEP; i++) {
-      prog1Point[i].x = (50 * i + 200) * prog1ACos;
-      prog1Point[i].y = (50 * i + 200) * prog1ASin;
-      Serial.print(" ");
-      Serial.print(prog1Point[i].x);
-      Serial.print("x");
-      Serial.print(prog1Point[i].y);
-      Serial.print(" ");
-    }
     armSetXYZ(0, 200, PROG1_H);
     prog1Step = 1;
-    prog1I = 0;
+    prog1L = ARM_L;
+    prog1H = PROG1_H;
   } else if (prog1Step == 1 && servoDone()) {
-    prog1Point[prog1I].h = laserVal();
-    prog1I++;
-    if (prog1I >= PROG1_MAX_STEP) {
-       prog1Step = 2;
-       prog1I = PROG1_MAX_STEP - 1;
-    } else {
-      armSetXYZ(prog1Point[prog1I].x, prog1Point[prog1I].y, PROG1_H);
-    }
-  } else if (prog1Step == 2) {
-    int minH = 2000;
-    int maxH = 0;
-    for (int i = 0; i < PROG1_MAX_STEP; i++) {
-      minH = min(minH, prog1Point[i].h);
-      maxH = max(maxH, prog1Point[i].h);
-    }
-    for (int i = 0; i < PROG1_MAX_STEP; i++) {
-      if ((prog1Point[i].h - (minH + maxH) / 2) < 70) {
-        prog1Point[i].h = 0;
-      }
-      Serial.print(" ");
-      Serial.print(prog1Point[i].h);
-    }
-    armSetA(45);
+    armSetXYZ(prog1L * prog1ACos, prog1L * prog1ASin, prog1H);
+    prog1Step = 2;
+  } else if (prog1Step == 2 && servoDone()) {
+    armSetA(80);
     prog1Step = 3;
-    prog1I = PROG1_MAX_STEP - 1;
-  } else if (prog1Step == 3) {
-    while(prog1Point[prog1I].h <= 0 && prog1I >= 0) {
-      prog1I--;
+  } else if (prog1Step == 3 && servoDone()) {
+    int x = touchX();
+    if (x > 32 && x < 128) {
+      prog1L -= 10;
     }
-    Serial.print(" i=");
-    Serial.print(prog1I);
-    if (prog1I <= 0) {
+    if (x >= 128) {
+      prog1H++;
+    }
+    if (x < 32) {
+      prog1H--;
+    }
+    if (prog1H > PROG1_H) {
+      prog1H = PROG1_H;
+    }
+    if (prog1H < 100) {
+      prog1H = 100;
+      prog1L -= 10;
+    }
+    if (prog1L < 100) {
       prog1Step = 0;
-    } else {
-      armSetXYZ(prog1Point[prog1I].x - 50 * prog1ACos, prog1Point[prog1I].y - 50 * prog1ASin, PROG1_H - prog1Point[prog1I].h + 50);
     }
+    armSetXYZ(prog1L * prog1ACos, prog1L * prog1ASin, prog1H);
   }
 }
 
