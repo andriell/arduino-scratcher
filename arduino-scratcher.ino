@@ -24,6 +24,7 @@ void loop() {
   prog2Loop();
   prog3Loop();
   prog4Loop();
+  prog5Loop();
   Serial.print(" m ");
   Serial.println(micros());
 }

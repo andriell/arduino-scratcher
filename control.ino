@@ -92,6 +92,9 @@ void controlLoop() {
   } else if (control == 4) {
     controlStopAll();
     prog4Start();
+  } else if (control == 5) {
+    controlStopAll();
+    prog5Start();
   } else if (control == 8) {
     controlStopAll();
     laserTestStart();
@@ -112,6 +115,7 @@ void controlStopAll() {
   prog2Stop();
   prog3Stop();
   prog4Stop();
+  prog5Stop();
 }
 
 boolean controlRead(int i) {

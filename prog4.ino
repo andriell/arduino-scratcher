@@ -1,7 +1,7 @@
 #define PROG4_MAX_STEP 16
-const int PROG4_H = 450;
-const int PROG4_HS = 100;
-const int PROG4_D = 400;
+const int PROG4_H = 300; // Высота перемещения
+const int PROG4_HS = 100; // Высота тела
+const int PROG4_D = 400; // Расстояние до тела
 
 boolean prog4On = false;
 byte prog4Step = 0;
